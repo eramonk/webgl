@@ -17,6 +17,7 @@ canvas {
 <canvas id="c"></canvas>
 <script id="2d-vertex-shader" type="x-shader/x-vertex">
 attribute vec2 a_position;
+attribute vec4 a_position2;
 
 uniform vec2 u_resolution;
 
@@ -43,8 +44,10 @@ void main() {
    gl_FragColor = u_color;
 }
 </script>
+
+
 <script src="webgl-utils.js"></script>
-<script src="webgl-lessons-helper.js"></script>
+<!--<script src="webgl-lessons-helper.js"></script>-->
 <script src="script3.js"></script>
 <!--<script src="estimator.js"></script>-->
 
