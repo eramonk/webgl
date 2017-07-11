@@ -7,14 +7,22 @@
 body {
   margin: 0;
 }
-canvas {
-  width: 100vw;
-  height: 100vh;
+#c {
+  width: 850px;
+  height: 700px;
   display: block;
-}</style>
+}
+#c1 {
+  width: 850px;
+  height: 20px;
+  display: block;
+}
+</style>
 </head>
 <body>
+<div>
 <canvas id="c"></canvas>
+</div>
 <script id="2d-vertex-shader" type="x-shader/x-vertex">
 attribute vec2 a_position;
 attribute vec4 a_position2;
@@ -45,10 +53,43 @@ void main() {
 }
 </script>
 
+<div>
+<canvas id="c1"></canvas>
+</div>
+<div id="num"></div>
+<!-- you can and should delete this script. it is only used on the site to help with errors -->
+<script id="2d-vertex-shader1" type="notjs">
+attribute vec4 a_position;
+
+  uniform vec2 u_resolution;
+
+  void main() {
+     // convert the position from pixels to 0.0 to 1.0
+     vec2 zeroToOne = a_position.xy / u_resolution;
+
+     // convert from 0->1 to 0->2
+     vec2 zeroToTwo = zeroToOne * 2.0;
+
+     // convert from 0->2 to -1->+1 (clipspace)
+     vec2 clipSpace = zeroToTwo - 1.0;
+
+     gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+  }
+</script>
+<!-- fragment shader -->
+<script id="2d-fragment-shader1" type="notjs">
+  precision mediump float;
+
+  void main() {
+    gl_FragColor = vec4(1, 0, 0.5, 1); // return redish-purple
+  }
+</script>
+
 
 <script src="webgl-utils.js"></script>
 <!--<script src="webgl-lessons-helper.js"></script>-->
 <script src="script3.js"></script>
+<script src="script4.js"></script>
 <!--<script src="estimator.js"></script>-->
 
 

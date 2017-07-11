@@ -1,4 +1,22 @@
 "use strict";
+
+//var test = [];
+//for (var i = 0; i < 2000; ++i) {
+//
+//    test.push(Math.round(Math.random()* 10))
+//
+//}
+//console.log("test",test)
+
+
+  var divNum = document.createElement("div");
+  
+  var number = document.createTextNode("0")
+  divNum.appendChild(number)
+
+  var num = document.getElementById("num");
+  num.appendChild(divNum)
+
 // Source
   var estimatorUrl = "http://87.245.204.8/fastcgi-device/vibro/estimator.bin";
   var estimatorHttp = null;
@@ -16,12 +34,12 @@
 
 //  Settings
   var pixelSize = 2;
-  var waterfallLeftMargin = 0;
-  var repeat_timeout_ms = 300;
+  var waterfallLeftMargin = 50;
+  var repeat_timeout_ms = 500;
   var waterfallWidth = 800;
   var waterfallHeight = 700;
   var waterfallZoomSize = 400;
-  var lower_threshold = 10;
+  var lower_threshold = 1;
 
 
 //  Color
@@ -62,6 +80,7 @@
   gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
 //Run
+//  var start = setInterval(testtest, repeat_timeout_ms);
   var start = setInterval(estimator, repeat_timeout_ms);
 //On click (zoom)
   canvas.onmousedown = function(ev){click(ev, gl, canvas, a_position2);};
@@ -81,9 +100,10 @@ function click(ev, gl, canvas, a_position2)
 
     var len = g_points.length
     waterfallState = [];
+    colorState = [];
     for (var i = 0; i < len; i += 2){
         gl.vertexAttrib3f(a_position2, g_points[i], g_points[i+1], 0.0);
-        console.log(g_points)
+//        console.log(g_points)
         if (g_points[0] < (waterfallWidth+waterfallLeftMargin) && g_points[0] > waterfallLeftMargin && zoom_status == false)
         {
 //
@@ -95,6 +115,7 @@ function click(ev, gl, canvas, a_position2)
         } else if (g_points[0] < (waterfallWidth+waterfallLeftMargin) && g_points[0] > waterfallLeftMargin && zoom_status == true)
                        {
                            clearInterval(start);
+
                            sliceFrom = 0;
                            sliceTo = numChanels;
                            g_points = [];
@@ -109,10 +130,10 @@ function click(ev, gl, canvas, a_position2)
 //            g_points = [];
 //        }
         count3 +=1;
-        console.log("count3" ,count3)
+//        console.log("count3" ,count3)
         g_points = [];
 
-        console.log(g_points);
+//        console.log(g_points);
     }
 }
 
@@ -121,9 +142,9 @@ function click(ev, gl, canvas, a_position2)
 function zoom(points)
 {
 
-  console.log(points[0], points[1] )
+//  console.log(points[0], points[1] )
     var x = waterfallWidth - (Math.abs(parseInt(points[0]) - waterfallLeftMargin));
-    console.log(x)
+//    console.log(x)
 //    var y = parseInt(points[1]) + 20;
 
     var from = x * (numChanels/waterfallWidth) - waterfallZoomSize/2
@@ -132,19 +153,19 @@ function zoom(points)
     if (from < 0) {
         sliceFrom = 0;
         sliceTo = waterfallZoomSize;
-        console.log("1", sliceFrom, sliceTo);
+//        console.log("1", sliceFrom, sliceTo);
     } else if (to > numChanels) {
         sliceFrom = numChanels - waterfallZoomSize - 1;
         sliceTo = numChanels - 1;
-        console.log("2", sliceFrom, sliceTo);
+//        console.log("2", sliceFrom, sliceTo);
 
     } else {
         sliceFrom = from;
         sliceTo = to;
-        console.log("3", sliceFrom, sliceTo);
+//        console.log("3", sliceFrom, sliceTo);
     }
 
-    console.log(sliceFrom, sliceTo);
+//    console.log(sliceFrom, sliceTo);
 
 
 }
@@ -208,18 +229,23 @@ function receiveData()
 		    plot_array[k] = parseInt(estimator_data.getFloat32(4*k));
 	        }
 	    }
-//            var sourceTo = plot_array.slice()
+
+//	    testtest()
+
+            var sourceTo = plot_array.slice()
 //            console.log(sourceTo)
 //        console.log("plot", plot_array.length);
 //        console.log("slice", sliceFrom, sliceTo);
-//            var zoom_array = plot_array.slice(sliceFrom, numChanels);
+            var zoom_array = plot_array.slice(sliceFrom, numChanels);
         if (count3  == 0)
         {
             var zoom_array = plot_array.slice(sliceFrom, numChanels);
+//            var zoom_array = test.slice(sliceFrom, numChanels);
 
         } else
         {
             var zoom_array = plot_array.slice(sliceFrom, sliceTo);
+//            var zoom_array = test.slice(sliceFrom, sliceTo);
         }
 //        console.log("zoom", zoom_array);
 
@@ -260,6 +286,54 @@ function receiveData()
      	alert(e.name);
      }
 }
+
+function testtest() {
+ if (count3  == 0)
+        {
+//            var zoom_array = plot_array.slice(sliceFrom, numChanels);
+            var zoom_array = test.slice(sliceFrom, numChanels);
+
+        } else
+        {
+//            var zoom_array = plot_array.slice(sliceFrom, sliceTo);
+            var zoom_array = test.slice(sliceFrom, sliceTo);
+        }
+//        console.log("zoom", zoom_array);
+
+
+        var num = Math.round(zoom_array.length/(waterfallWidth/pixelSize));
+        var line = new Array();
+        var setColor = new Array();
+        var count4 = 0;
+
+        for (var i = waterfallWidth/pixelSize; i > 0; --i){
+          var t = zoom_array.slice(count4, num+count4);
+
+          for (var j = t.length; j > 0; --j) {
+            if (t[j-1] > lower_threshold)
+            {
+              line.push(i);
+//              console.log("elem", t[j-1])
+              setColor.push(parseInt(t[j-1]))
+              break;
+            }
+          }
+
+          count4 += num
+        }
+//        setColor = [];
+//        console.log("arr", setColor)
+//        console.log("set", getMaxOfArray(setColor))
+        function getMaxOfArray(numArray) {
+          return Math.max.apply(null, numArray);
+        }
+
+        play1(line, setColor)
+//        setColor = [];
+
+     }
+
+
 
 //function rebuildWaterfallState() {
 //
@@ -420,5 +494,7 @@ function setRectangle(gl, x, y, width, height) {
      x2, y1,
      x2, y2,
   ]), gl.STATIC_DRAW);
+
+
 }
 
