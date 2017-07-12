@@ -28,8 +28,8 @@ function main() {
   var positions = [
     x,  y,
     x + 800, y,
-    x, y,
-    x, z,
+    x + 1, y,
+    x + 1, z,
     x + 100, y,
     x + 100, z,
     x + 200, y,

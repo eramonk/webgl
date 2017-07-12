@@ -7,15 +7,32 @@
 //
 //}
 //console.log("test",test)
+ var count7 = 0;
+ var step = 2500
+ var posStep = 45
+ var pos1 = 0
 
 
-  var divNum = document.createElement("div");
-  
-  var number = document.createTextNode("0")
-  divNum.appendChild(number)
+  for (var i = 0; i < 9; ++i) {
+  var divNum = document.createElement("div")
+//  .setAttribute("id", i);
+
+  var number = document.createTextNode(count7);
+  divNum.appendChild(number);
+  divNum.style.textAlign = "center"
+  divNum.style.display = "inline-block";
+  divNum.setAttribute("id", i);
+
+  divNum.style.width = '100px';
+  divNum.style.position = 'relative';
+  divNum.style.left = pos1 + "px";
 
   var num = document.getElementById("num");
-  num.appendChild(divNum)
+  num.appendChild(divNum);
+  count7 += step;
+//  pos1 += posStep;
+//  posStep += 15
+  }
 
 // Source
   var estimatorUrl = "http://87.245.204.8/fastcgi-device/vibro/estimator.bin";
@@ -39,7 +56,7 @@
   var waterfallWidth = 800;
   var waterfallHeight = 700;
   var waterfallZoomSize = 400;
-  var lower_threshold = 1;
+  var lower_threshold = 10;
 
 
 //  Color
