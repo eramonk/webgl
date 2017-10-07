@@ -1,8 +1,6 @@
 "use strict";
 
 
-
-// Source
   var estimatorUrl = "http://87.245.204.8/fastcgi-device/vibro/estimator.bin";
   var estimatorHttp = null;
   var timestamp_str="0x0";
@@ -84,7 +82,6 @@ function bottomLine() {
             divNum.setAttribute("id", i);
             divNum.style.width = '100px';
             divNum.style.position = 'relative';
-
             var num = document.getElementById("num");
             num.appendChild(divNum);
             count7 += step;
@@ -117,9 +114,7 @@ function click(ev, gl, canvas, a_position2)
                         var num1 = document.getElementById(i);
                         num.removeChild(num1);
                   }
-//            var xx = document.getElementById("num");
 
-//            bottomLine();
         } else if (g_points[0] < (waterfallWidth+waterfallLeftMargin) && g_points[0] > waterfallLeftMargin && zoom_status == true)
         {
             clearInterval(start);
@@ -170,7 +165,6 @@ function zoom(points)
 
 function estimator()
 {
-
     try
     {
     	estimatorHttp = new XMLHttpRequest();
@@ -204,7 +198,7 @@ function receiveData()
     	var estimator_channels = (new DataView(estimatorArray.slice(12,13))).getUint8(0);
     	var estimator_length = (new DataView(estimatorArray.slice(13,17))).getUint32(0);
     	var estimator_data = new DataView(estimatorArray.slice(17));
-	    var points_count = 4000;
+	var points_count = 4000;
         var plot_array = new Array(estimator_length);
         numChanels = estimator_length
 
